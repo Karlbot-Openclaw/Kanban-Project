@@ -14,11 +14,6 @@ class KanbanBoard {
             this.addColumn();
         });
 
-        // Add card button
-        document.getElementById('add-card-btn').addEventListener('click', () => {
-            this.showCardModal();
-        });
-
         // Card modal form
         document.getElementById('card-form').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -241,7 +236,8 @@ class KanbanBoard {
         const labelElement = cardElement.querySelector('span:first-of-type');
         if (card.label) {
             labelElement.textContent = card.label.charAt(0).toUpperCase() + card.label.slice(1);
-            labelElement.className = `px-2 py-1 text-xs font-medium bg-${this.getLabelColor(card.label)}-100 text-${this.getLabelColor(card.label)}-800 rounded-full`;
+            labelElement.className = `px-2 py-1 text-xs font-medium bg-${this.getLabelColor(card.label)}-100 text-${this.getLabelColor(card.label)}-800 rounded-full label`;
+            labelElement.style.display = 'inline-block';
         } else {
             labelElement.style.display = 'none';
         }
@@ -272,11 +268,23 @@ class KanbanBoard {
         cardDiv.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('cardId', card.id);
             e.dataTransfer.setData('fromColumnId', columnId);
-            cardDiv.classList.add('opacity-50');
+            cardDiv.classList.add('dragging');
+            
+            // Add slide-in animation to cards
+            const cards = cardDiv.parentElement.children;
+            for (let i = 0; i < cards.length; i++) {
+                cards[i].classList.add('slide-in');
+            }
         });
         
         cardDiv.addEventListener('dragend', () => {
-            cardDiv.classList.remove('opacity-50');
+            cardDiv.classList.remove('dragging');
+            
+            // Remove animations after drag
+            const cards = cardDiv.parentElement.children;
+            for (let i = 0; i < cards.length; i++) {
+                cards[i].classList.remove('slide-in');
+            }
         });
         
         return cardElement;
@@ -299,15 +307,33 @@ class KanbanBoard {
             column.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 column.classList.add('drop-target');
+                
+                // Add hover effect to cards
+                const cards = column.querySelectorAll('.card');
+                cards.forEach(card => {
+                    card.classList.add('pulse');
+                });
             });
             
             column.addEventListener('dragleave', () => {
                 column.classList.remove('drop-target');
+                
+                // Remove hover effect
+                const cards = column.querySelectorAll('.card');
+                cards.forEach(card => {
+                    card.classList.remove('pulse');
+                });
             });
             
             column.addEventListener('drop', (e) => {
                 e.preventDefault();
                 column.classList.remove('drop-target');
+                
+                // Remove hover effect
+                const cards = column.querySelectorAll('.card');
+                cards.forEach(card => {
+                    card.classList.remove('pulse');
+                });
                 
                 const cardId = e.dataTransfer.getData('cardId');
                 const fromColumnId = e.dataTransfer.getData('fromColumnId');
@@ -344,6 +370,18 @@ class KanbanBoard {
 // Initialize the board when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.kanbanBoard = new KanbanBoard();
+    
+    // Set up theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        themeToggle.classList.toggle('active');
+        
+        localStorage.setItem('theme', newTheme);
+    });
     
     // Set up drag and drop after initial render
     setTimeout(() => {

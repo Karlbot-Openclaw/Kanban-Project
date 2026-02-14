@@ -15,6 +15,18 @@ try {
     const app = firebase.initializeApp(firebaseConfig);
     db = firebase.firestore();
     console.log('Firebase initialized');
+    
+    // Enable offline persistence
+    db.enablePersistence()
+      .catch((err) => {
+        if (err.code === 'failed-precondition') {
+          console.warn('Firestore persistence failed: multiple tabs open (shared mode not enabled)');
+        } else if (err.code === 'unimplemented') {
+          console.warn('Firestore persistence not supported in this browser');
+        } else {
+          console.error('Firestore persistence error:', err);
+        }
+      });
   } else {
     console.error('Firebase SDK not loaded');
   }

@@ -590,12 +590,14 @@ button:focus {
   border-radius: 12px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  width: 100%; /* Fill full column width */
-  max-width: 100%; /* Allow expansion to fill flexible columns */
+  width: 100% !important; /* Force full column width */
+  max-width: 100% !important; /* Override any max-width constraints */
+  min-width: 0; /* Allow flex shrinking */
   box-sizing: border-box; /* Include padding in width */
   word-wrap: break-word; /* Break long words */
   overflow-wrap: break-word; /* Modern equivalent */
   word-break: break-word; /* More aggressive word breaking */
+  flex-shrink: 1; /* Allow card to shrink if needed */
 }
 
 .card h4 {

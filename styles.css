@@ -506,17 +506,26 @@ select:focus {
   }
   
   header .flex {
-    flex-direction: column;
-    gap: 12px;
+    flex-direction: row; /* Keep horizontal layout on mobile */
+    flex-wrap: wrap; /* Allow wrapping if needed for very small screens */
+    align-items: center; /* Vertically center items */
+    gap: 8px; /* Tighter spacing for mobile */
     position: relative;
     z-index: 100;
     background-color: var(--bg-secondary);
-    padding: 12px 0;
+    padding: 8px 0;
+  }
+  
+  header .flex > div:first-child {
+    flex: 1 1 auto; /* Allow title to take available space */
+    min-width: 0; /* Allow shrinking to fit content */
   }
   
   header .flex > div:last-child {
-    justify-content: center;
-    width: 100%;
+    flex: 0 1 auto; /* Buttons container can shrink if needed */
+    justify-content: flex-end; /* Keep buttons aligned right */
+    width: auto; /* Let content determine width */
+    min-width: 0; /* Allow shrinking to fit */
   }
   
   .column {
@@ -534,16 +543,18 @@ select:focus {
     margin-bottom: 8px;
   }
   
-  /* Make header buttons more accessible on mobile */
+  /* Make header buttons more accessible and compact on mobile */
   #add-column-btn,
   #add-card-btn {
-    font-size: 14px;
-    padding: 10px 16px;
+    font-size: 12px;
+    padding: 8px 10px;
     min-height: 44px; /* Minimum touch target size */
+    margin-left: 4px; /* Reduce spacing between buttons */
   }
   
   #theme-toggle {
-    min-height: 44px; /* Minimum touch target size */
+    min-height: 44px;
+    min-width: 44px; /* Ensure square touch target */
   }
   
   /* Ensure content doesn't scroll under header */
@@ -589,9 +600,9 @@ select:focus {
     border-radius: 12px;
   }
   
-  /* Ensure header stays above content */
+  /* Ensure content doesn't hide under fixed header */
   body {
-    padding-top: 0;
+    padding-top: 64px; /* Match header height */
   }
 }
 

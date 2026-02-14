@@ -3,160 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kanban Project Board</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="styles.css?v=5">
-    <script>
-        // Apply dark mode from localStorage
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                const themeToggle = document.getElementById('theme-toggle');
-                themeToggle.classList.add('active');
-            }
-        });
-    </script>
+    <title>Kanban Board</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <header class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <h1 class="text-2xl font-bold text-gray-900">Kanban <span class="mobile-hide">Board</span></h1>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                    </button>
-                    <button id="add-column-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
-                        + Add Column
-                    </button>
-                    <button id="add-card-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
-                        + Add Card
-                    </button>
-                    <!-- <button id="theme-toggle" class="theme-toggle ml-4" aria-label="Toggle dark mode"> -->
-                    <!--     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"> -->
-                    <!--         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"> -->
-                    <!--     </svg> -->
-                    <!-- </button> -->
-                </div>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="icon-btn theme-toggle" aria-label="Toggle theme">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <h1 class="app-title">Kanban Board</h1>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-primary add-column-btn">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span class="btn-text">Add Column</span>
+                </button>
+                <button class="btn btn-secondary add-card-btn">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span class="btn-text">Add Card</span>
+                </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div id="columns-container" class="flex gap-4 overflow-x-auto">
-            <!-- Columns will be dynamically added here -->
+    <main class="board">
+        <div class="columns-container">
+            <div class="column">
+                <div class="column-header">
+                    <h3 class="column-title">To Do</h3>
+                    <button class="icon-btn column-menu-btn" aria-label="Column menu">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="5" r="2"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <circle cx="12" cy="19" r="2"></circle>
+                        </svg>
+                    </button>
+                </div>
+                <div class="cards">
+                    <div class="card">
+                        <h4>Design homepage mockup</h4>
+                        <p>Create the initial design mockups for the homepage layout</p>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3 class="column-title">In Progress</h3>
+                    <button class="icon-btn column-menu-btn" aria-label="Column menu">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="5" r="2"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <circle cx="12" cy="19" r="2"></circle>
+                        </svg>
+                    </button>
+                </div>
+                <div class="cards">
+                    <div class="card">
+                        <h4>Implement authentication</h4>
+                        <p>Add OAuth2 login flow with Google and GitHub</p>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3 class="column-title">Done</h3>
+                    <button class="icon-btn column-menu-btn" aria-label="Column menu">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="5" r="2"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <circle cx="12" cy="19" r="2"></circle>
+                        </svg>
+                    </button>
+                </div>
+                <div class="cards">
+                    <div class="card">
+                        <h4>Set up project repository</h4>
+                        <p>Initialize git repo and add initial documentation</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
-    <template id="column-template">
-        <div class="column" data-column-id="">
-            <div class="flex justify-between items-center mb-4 column-header">
-                <div class="flex items-center space-x-2">
-                    <button class="text-gray-400 hover:text-gray-600 transition-colors move-left-btn">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                        </svg>
-                    </button>
-                    <h3 class="text-lg font-semibold text-gray-900 column-title">Column Title</h3>
-                    <button class="text-gray-400 hover:text-gray-600 transition-colors move-right-btn">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="flex space-x-2">
-                    <button class="text-gray-400 hover:text-gray-600 transition-colors edit-column-btn" title="Edit column">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14 M12 5l7 7-7 7"></path>
-                        </svg>
-                    </button>
-                    <button class="text-gray-400 hover:text-red-600 transition-colors delete-column-btn" title="Delete column">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="cards-container space-y-3">
-                <!-- Cards will be dynamically added here -->
-            </div>
-            <button class="add-card-btn w-full text-left text-sm text-blue-600 hover:text-blue-700 transition-colors">
-                + Add Card
-            </button>
-        </div>
-    </template>
-
-    <template id="card-template">
-        <div class="card bg-gray-50 rounded-lg border border-gray-200 p-4 cursor-move hover:shadow-md transition-shadow">
-            <div class="flex justify-between items-start mb-2">
-                <h4 class="text-sm font-medium text-gray-900">Card Title</h4>
-                <div class="flex items-center space-x-1">
-                    <span class="text-xs text-gray-500">#1</span>
-                    <button class="text-gray-400 hover:text-gray-600 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14 M12 5l7 7-7 7"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <p class="text-sm text-gray-600 mb-2">Card description goes here...</p>
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                    <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Task</span>
-                    <span class="text-xs text-gray-500">Today</span>
-                </div>
-                <div class="flex space-x-1">
-                    <button class="text-gray-400 hover:text-yellow-600 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.933 12.8a1 1 0 000 1.6l-1.858 1.858a1 1 0 001.414 1.414l1.858-1.858a1 1 0 000-1.6l-1.858-1.858a1 1 0 00-1.414 0z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <div id="card-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Add New Card</h3>
-            <form id="card-form" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Label</label>
-                    <select name="label" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">None</option>
-                        <option value="task">Task</option>
-                        <option value="bug">Bug</option>
-                        <option value="feature">Feature</option>
-                        <option value="enhancement">Enhancement</option>
-                    </select>
-                </div>
-                <div class="flex space-x-4">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
-                        Save
-                    </button>
-                    <button type="button" id="cancel-card-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-colors">
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
-    <script src="script.js?v=5"></script>
+    <script src="script.js"></script>
 </body>
 </html>

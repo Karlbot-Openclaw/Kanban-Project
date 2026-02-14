@@ -547,13 +547,55 @@ class KanbanBoard {
 
 }
 
-// Initialize the board when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.kanbanBoard = new KanbanBoard();
+// Add mobile header behavior
+function initializeMobileHeader() {
+    const header = document.querySelector('header');
+    const main = document.querySelector('main');
     
-    // Set up drag and drop (event delegation works for all columns)
-    window.kanbanBoard.setupDragAndDrop();
-});
+    if (!header || !main) return;
+    
+    // Handle mobile header positioning
+    if (window.innerWidth <= 768) {
+        // Add padding to body to prevent content from scrolling under header
+        document.body.style.paddingTop = '64px';
+        
+        // Make header fixed
+        header.style.position = 'fixed';
+        header.style.width = '100%';
+        header.style.top = '0';
+        header.style.left = '0';
+        header.style.right = '0';
+        header.style.zIndex = '1000';
+        
+        // Add padding to main
+        main.style.paddingTop = '8px';
+        main.style.paddingBottom = '64px';
+    } else {
+        // Reset for desktop
+        document.body.style.paddingTop = '';
+        header.style.position = '';
+        header.style.width = '';
+        header.style.top = '';
+        header.style.left = '';
+        header.style.right = '';
+        header.style.zIndex = '';
+        main.style.paddingTop = '';
+        main.style.paddingBottom = '';
+    }
+}
+
+// Initialize mobile header behavior
+initializeMobileHeader();
+
+// Handle window resize
+window.addEventListener('resize', initializeMobileHeader);
+
+// Add this to the DOMContentLoaded function
+window.kanbanBoard = new KanbanBoard();
+initializeMobileHeader();
+
+// Set up drag and drop (event delegation works for all columns)
+window.kanbanBoard.setupDragAndDrop();
 
 // Add CSS for drop target
 const style = document.createElement('style');

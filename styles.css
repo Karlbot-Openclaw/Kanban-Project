@@ -92,8 +92,11 @@ header {
   background-color: var(--bg-secondary) !important;
   border-bottom: 1px solid var(--border-color) !important;
   box-shadow: var(--shadow-sm) !important;
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 100;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 header h1 {
@@ -468,18 +471,16 @@ select:focus {
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
-  .column {
-    flex: 0 0 100% !important;
-    width: 100% !important;
-    min-width: 0 !important;
+  body {
+    padding-top: 64px; /* Account for sticky header */
   }
   
-  .column-header {
-    position: static !important;
-    background-color: var(--bg-secondary);
-    padding: 12px;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: 8px;
+  header {
+    position: fixed !important;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
   }
   
   header .flex {
@@ -496,17 +497,79 @@ select:focus {
     width: 100%;
   }
   
-  /* Ensure header stays above content */
-  body {
-    padding-top: 0;
-  }
-}
-
-@media (max-width: 480px) {
   .column {
     flex: 0 0 100% !important;
     width: 100% !important;
     min-width: 0 !important;
+    margin-bottom: 16px;
+  }
+  
+  .column-header {
+    position: static !important;
+    background-color: var(--bg-secondary);
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 8px;
+  }
+  
+  /* Make header buttons more accessible on mobile */
+  #add-column-btn,
+  #add-card-btn {
+    font-size: 14px;
+    padding: 10px 16px;
+    min-height: 44px; /* Minimum touch target size */
+  }
+  
+  #theme-toggle {
+    min-height: 44px; /* Minimum touch target size */
+  }
+  
+  /* Ensure content doesn't scroll under header */
+  main {
+    padding-top: 8px;
+    padding-bottom: 64px; /* Account for bottom space */
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 64px; /* Account for sticky header */
+  }
+  
+  header {
+    position: fixed !important;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  .column {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  
+  /* Hide individual column add card buttons on small screens */
+  .column .add-card-btn {
+    display: none;
+  }
+  
+  /* Show only global add card button on mobile */
+  #add-card-btn {
+    display: inline-block;
+  }
+  
+  /* Make buttons more touch-friendly */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+    border-radius: 12px;
+  }
+  
+  /* Ensure header stays above content */
+  body {
+    padding-top: 0;
   }
 }
 
@@ -517,30 +580,41 @@ select:focus {
   }
 }
 
-/* ===== PRINT STYLES ===== */
-@media print {
-  .btn,
-  .modal,
-  .header,
-  .move-left-btn,
-  .move-right-btn,
-  .delete-column-btn,
-  .delete-card-btn,
-  .edit-column-btn,
-  .add-card-btn {
-    display: none !important;
+/* ===== ADDITIONAL MOBILE HEADER FIXES ===== */
+/* Ensure header stays above content on mobile */
+@media (max-width: 768px) {
+  body {
+    padding-top: 64px; /* Account for sticky header */
   }
   
-  .column {
-    break-inside: avoid;
-    page-break-inside: avoid;
-    border: 1px solid #ccc !important;
-    background: white !important;
+  header {
+    position: fixed !important;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
   }
   
-  .card {
-    background: #f9f9f9 !important;
-    border: 1px solid #ddd !important;
+  main {
+    padding-top: 8px;
+    padding-bottom: 64px;
+  }
+}
+
+/* ===== BUTTON ACCESSIBILITY ON MOBILE ===== */
+@media (max-width: 768px) {
+  #add-column-btn,
+  #add-card-btn {
+    min-height: 44px;
+    min-width: 44px;
+    border-radius: 12px;
+  }
+  
+  #theme-toggle {
+    min-height: 44px;
+    min-width: 44px;
+    border-radius: 12px;
   }
 }
 

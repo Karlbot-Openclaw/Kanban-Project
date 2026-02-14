@@ -40,6 +40,9 @@
   /* Column accent (dynamic) */
   --column-accent: transparent;
   
+  /* Board background (behind columns) */
+  --board-bg: #f8fafc; /* Slate 50 - light cool gray for light mode */
+  
   /* Shadow */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -55,6 +58,8 @@
   --bg-secondary: #1f2937; /* Gray 800 */
   --bg-tertiary: #374151; /* Gray 700 */
   --bg-hover: #374151;
+  
+  --board-bg: #0f172a; /* Slate 900 - dark cool gray for dark mode */
   
   --text-primary: #f9fafb; /* Gray 50 */
   --text-secondary: #d1d5db; /* Gray 300 */
@@ -325,6 +330,7 @@ header h1 {
 .board {
   padding: 16px;
   overflow-x: auto;
+  background-color: var(--board-bg);
 }
 
 .columns-container {

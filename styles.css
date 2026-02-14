@@ -143,6 +143,16 @@ header h1 {
   flex: 0 0 300px;
   width: 300px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.column-header {
+  position: relative;
+  z-index: 10;
+  background-color: var(--bg-secondary);
+  padding: 12px;
 }
 
 .column:hover {
@@ -405,63 +415,6 @@ header h1 {
 .card.dragging {
   opacity: 0.5 !important;
   transform: scale(0.95) !important;
-}
-
-/* ===== COLORBLIND FRIENDLY MODE ===== */
-.colorblind-mode .label-blue,
-.colorblind-mode .label-green,
-.colorblind-mode .label-red,
-.colorblind-mode .label-purple,
-.colorblind-mode .label-yellow,
-.colorblind-mode .label-gray {
-  position: relative;
-  padding-left: 24px;
-}
-
-.colorblind-mode .label-blue::before,
-.colorblind-mode .label-green::before,
-.colorblind-mode .label-red::before,
-.colorblind-mode .label-purple::before,
-.colorblind-mode .label-yellow::before,
-.colorblind-mode .label-gray::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.colorblind-mode .label-blue::before { background-color: var(--color-primary); }
-.colorblind-mode .label-green::before { background-color: var(--color-success); }
-.colorblind-mode .label-red::before { background-color: var(--color-danger); }
-.colorblind-mode .label-purple::before { background-color: #9333ea; }
-.colorblind-mode .label-yellow::before { background-color: var(--color-warning); }
-.colorblind-mode .label-gray::before { background-color: var(--text-tertiary); }
-
-/* Colorblind toggle button */
-#colorblind-toggle {
-  background: var(--bg-tertiary) !important;
-  border: 1px solid var(--border-color) !important;
-  color: var(--text-secondary) !important;
-  padding: 8px 12px !important;
-  border-radius: 8px !important;
-  font-size: 14px !important;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-#colorblind-toggle:hover {
-  background-color: var(--bg-hover) !important;
-  color: var(--text-primary) !important;
-}
-
-#colorblind-toggle.active {
-  background-color: var(--color-primary-light) !important;
-  color: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
 }
 
 /* ===== LOADING STATES ===== */

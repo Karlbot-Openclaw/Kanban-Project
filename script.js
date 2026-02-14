@@ -68,14 +68,6 @@ class KanbanBoard {
             const themeToggle = document.getElementById('theme-toggle');
             if (themeToggle) themeToggle.classList.add('active');
         }
-        
-        // Apply colorblind mode from localStorage
-        const savedColorblind = localStorage.getItem('colorblind-mode');
-        if (savedColorblind === 'true') {
-            document.body.classList.add('colorblind-mode');
-            const colorblindToggle = document.getElementById('colorblind-toggle');
-            if (colorblindToggle) colorblindToggle.classList.add('active');
-        }
     }
 
     async loadFromFirestore() {
@@ -99,14 +91,6 @@ class KanbanBoard {
         if (themeToggle) {
             themeToggle.addEventListener('click', () => {
                 this.toggleTheme();
-            });
-        }
-
-        // Colorblind toggle
-        const colorblindToggle = document.getElementById('colorblind-toggle');
-        if (colorblindToggle) {
-            colorblindToggle.addEventListener('click', () => {
-                this.toggleColorblindMode();
             });
         }
 
@@ -175,22 +159,6 @@ class KanbanBoard {
             themeToggle.classList.add('active');
         } else {
             themeToggle.classList.remove('active');
-        }
-    }
-
-    toggleColorblindMode() {
-        const body = document.body;
-        const current = body.classList.contains('colorblind-mode');
-        const colorblindToggle = document.getElementById('colorblind-toggle');
-        
-        if (current) {
-            body.classList.remove('colorblind-mode');
-            localStorage.setItem('colorblind-mode', 'false');
-            colorblindToggle.classList.remove('active');
-        } else {
-            body.classList.add('colorblind-mode');
-            localStorage.setItem('colorblind-mode', 'true');
-            colorblindToggle.classList.add('active');
         }
     }
 

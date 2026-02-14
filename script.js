@@ -314,49 +314,62 @@ class KanbanBoard {
         return colors[label] || 'gray';
     }
 
+    // Drag and drop using event delegation
     setupDragAndDrop() {
-        const columns = document.querySelectorAll('.column');
+        const container = document.getElementById('columns-container');
         
-        columns.forEach(column => {
-            column.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                column.classList.add('drop-target');
-                
-                // Add hover effect to cards
-                const cards = column.querySelectorAll('.card');
-                cards.forEach(card => {
-                    card.classList.add('pulse');
-                });
-            });
+        // Dragover: highlight drop target
+        container.addEventListener('dragover', (e) => {
+            const column = e.target.closest('.column');
+            if (!column) return;
             
-            column.addEventListener('dragleave', () => {
+            e.preventDefault();
+            column.classList.add('drop-target');
+            
+            // Add hover effect to cards in this column
+            const cards = column.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.classList.add('pulse');
+            });
+        });
+        
+        // Dragleave: remove highlight
+        container.addEventListener('dragleave', (e) => {
+            const column = e.target.closest('.column');
+            if (!column) return;
+            
+            // Only remove if we're leaving the column entirely
+            if (!column.contains(e.relatedTarget)) {
                 column.classList.remove('drop-target');
                 
-                // Remove hover effect
                 const cards = column.querySelectorAll('.card');
                 cards.forEach(card => {
                     card.classList.remove('pulse');
                 });
+            }
+        }, true);
+        
+        // Drop: move card
+        container.addEventListener('drop', (e) => {
+            const column = e.target.closest('.column');
+            if (!column) return;
+            
+            e.preventDefault();
+            column.classList.remove('drop-target');
+            
+            // Remove hover effects
+            const cards = column.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.classList.remove('pulse');
             });
             
-            column.addEventListener('drop', (e) => {
-                e.preventDefault();
-                column.classList.remove('drop-target');
-                
-                // Remove hover effect
-                const cards = column.querySelectorAll('.card');
-                cards.forEach(card => {
-                    card.classList.remove('pulse');
-                });
-                
-                const cardId = e.dataTransfer.getData('cardId');
-                const fromColumnId = e.dataTransfer.getData('fromColumnId');
-                const toColumnId = column.dataset.columnId;
-                
-                if (fromColumnId !== toColumnId) {
-                    this.moveCard(cardId, fromColumnId, toColumnId);
-                }
-            });
+            const cardId = e.dataTransfer.getData('cardId');
+            const fromColumnId = e.dataTransfer.getData('fromColumnId');
+            const toColumnId = column.dataset.columnId;
+            
+            if (fromColumnId && toColumnId && fromColumnId !== toColumnId) {
+                this.moveCard(cardId, fromColumnId, toColumnId);
+            }
         });
     }
 
@@ -397,10 +410,8 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', newTheme);
     });
     
-    // Set up drag and drop after initial render
-    setTimeout(() => {
-        window.kanbanBoard.setupDragAndDrop();
-    }, 100);
+    // Set up drag and drop (event delegation works for all columns)
+    window.kanbanBoard.setupDragAndDrop();
 });
 
 // Add CSS for drop target

@@ -692,14 +692,14 @@ button:focus {
   text-underline-offset: 2px;
 }
 
-/* Checkmark button styling */
+/* Checkmark button styling - subtle green */
 .card-complete-btn {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background-color: #dcfce7;
-  color: #16a34a;
-  border: 1px solid #86efac;
+  background-color: #f0fdf4; /* Very faint green (almost white) */
+  color: #86efac; /* Light green icon */
+  border: 1px solid #dcfce7; /* Light green border */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -708,9 +708,10 @@ button:focus {
 }
 
 .card-complete-btn:hover {
-  background-color: #16a34a;
-  color: white;
-  transform: scale(1.1);
+  background-color: #dcfce7; /* Slightly more green on hover */
+  color: #16a34a; /* Darker green on hover */
+  border-color: #bbf7d0;
+  transform: scale(1.05);
 }
 
 /* Column move buttons */

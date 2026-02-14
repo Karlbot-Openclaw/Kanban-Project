@@ -315,28 +315,31 @@ class KanbanBoard {
             cardsContainer.appendChild(cardElement);
         });
         
-        // Column actions
-        const actions = columnElement.querySelectorAll('button:first-of-type, button:nth-of-type(2)');
+        // Column action buttons - use explicit classes to avoid conflicts
+        const editBtn = columnElement.querySelector('.edit-column-btn');
+        if (editBtn) {
+            editBtn.addEventListener('click', () => {
+                const newTitle = prompt('Edit column name:', column.title);
+                if (newTitle && newTitle !== column.title) {
+                    column.title = newTitle;
+                    this.save();
+                    this.render();
+                }
+            });
+        }
         
-        // Edit column
-        actions[0].addEventListener('click', () => {
-            const newTitle = prompt('Edit column name:', column.title);
-            if (newTitle && newTitle !== column.title) {
-                column.title = newTitle;
-                this.save();
-                this.render();
-            }
-        });
-        
-        // Delete column
-        actions[1].addEventListener('click', () => {
-            if (confirm(`Delete column "${column.title}"?`)) {
-                this.deleteColumn(column.id);
-            }
-        });
+        const deleteBtn = columnElement.querySelector('.delete-column-btn');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', () => {
+                if (confirm(`Delete column "${column.title}"?`)) {
+                    this.deleteColumn(column.id);
+                }
+            });
+        }
         
         // Set column id for data
-        columnElement.querySelector('.column').dataset.columnId = column.id;
+        const columnDiv = columnElement.querySelector('.column');
+        columnDiv.dataset.columnId = column.id;
         
         return columnElement;
     }

@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kanban Board</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header class="app-header">
         <div class="header-content">
             <div class="header-left">
-                <button class="icon-btn theme-toggle" aria-label="Toggle theme">
+                <button id="theme-toggle" class="icon-btn theme-toggle" aria-label="Toggle theme">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"></circle>
                         <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -23,17 +24,23 @@
                         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
                 </button>
+                <button id="colorblind-toggle" class="icon-btn colorblind-toggle" aria-label="Toggle colorblind mode" title="Toggle colorblind-friendly labels">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                </button>
                 <h1 class="app-title">Kanban Board</h1>
             </div>
             <div class="header-right">
-                <button class="btn btn-primary add-column-btn">
+                <button id="add-column-btn" class="btn btn-primary add-column-btn">
                     <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
                     <span class="btn-text">Add Column</span>
                 </button>
-                <button class="btn btn-secondary add-card-btn">
+                <button id="add-card-btn" class="btn btn-secondary add-card-btn">
                     <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -45,64 +52,113 @@
     </header>
 
     <main class="board">
-        <div class="columns-container">
-            <div class="column">
-                <div class="column-header">
-                    <h3 class="column-title">To Do</h3>
-                    <button class="icon-btn column-menu-btn" aria-label="Column menu">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <circle cx="12" cy="5" r="2"></circle>
-                            <circle cx="12" cy="12" r="2"></circle>
-                            <circle cx="12" cy="19" r="2"></circle>
+        <div id="columns-container" class="columns-container"></div>
+    </main>
+
+    <template id="column-template">
+        <div class="column min-w-[300px] bg-white rounded-lg shadow-lg p-4" data-column-id="">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center space-x-2">
+                    <button class="text-gray-400 hover:text-gray-600 transition-colors move-left-btn">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <h3 class="text-lg font-semibold text-gray-900 column-title">Column Title</h3>
+                    <button class="text-gray-400 hover:text-gray-600 transition-colors move-right-btn">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </button>
                 </div>
-                <div class="cards">
-                    <div class="card">
-                        <h4>Design homepage mockup</h4>
-                        <p>Create the initial design mockups for the homepage layout</p>
-                    </div>
+                <div class="flex space-x-2">
+                    <button class="text-gray-400 hover:text-gray-600 transition-colors edit-column-btn" title="Edit column">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14 M12 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <button class="text-gray-400 hover:text-red-600 transition-colors delete-column-btn" title="Delete column">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
-            <div class="column">
-                <div class="column-header">
-                    <h3 class="column-title">In Progress</h3>
-                    <button class="icon-btn column-menu-btn" aria-label="Column menu">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <circle cx="12" cy="5" r="2"></circle>
-                            <circle cx="12" cy="12" r="2"></circle>
-                            <circle cx="12" cy="19" r="2"></circle>
+            <div class="cards-container space-y-3">
+                <!-- Cards will be dynamically added here -->
+            </div>
+            <button class="add-card-btn w-full text-left text-sm text-blue-600 hover:text-blue-700 transition-colors">
+                + Add Card
+            </button>
+        </div>
+    </template>
+
+    <template id="card-template">
+        <div class="card bg-gray-50 rounded-lg border border-gray-200 p-4 cursor-move hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start mb-2">
+                <h4 class="text-sm font-medium text-gray-900">Card Title</h4>
+                <div class="flex items-center space-x-1">
+                    <span class="text-xs text-gray-500">#1</span>
+                    <button class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14 M12 5l7 7-7 7"></path>
                         </svg>
                     </button>
-                </div>
-                <div class="cards">
-                    <div class="card">
-                        <h4>Implement authentication</h4>
-                        <p>Add OAuth2 login flow with Google and GitHub</p>
-                    </div>
                 </div>
             </div>
-            <div class="column">
-                <div class="column-header">
-                    <h3 class="column-title">Done</h3>
-                    <button class="icon-btn column-menu-btn" aria-label="Column menu">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <circle cx="12" cy="5" r="2"></circle>
-                            <circle cx="12" cy="12" r="2"></circle>
-                            <circle cx="12" cy="19" r="2"></circle>
+            <p class="text-sm text-gray-600 mb-2">Card description goes here...</p>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Task</span>
+                    <span class="text-xs text-gray-500">Today</span>
+                </div>
+                <div class="flex space-x-1">
+                    <button class="text-gray-400 hover:text-red-600 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                         </svg>
                     </button>
-                </div>
-                <div class="cards">
-                    <div class="card">
-                        <h4>Set up project repository</h4>
-                        <p>Initialize git repo and add initial documentation</p>
-                    </div>
                 </div>
             </div>
         </div>
-    </main>
+    </template>
 
+    <div id="card-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="text-lg font-medium text-gray-900">Add New Card</h3>
+            </div>
+            <div class="modal-body">
+                <form id="card-form">
+                    <div class="form-group">
+                        <label class="form-label" for="card-title">Title</label>
+                        <input type="text" id="card-title" name="title" required class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="card-description">Description</label>
+                        <textarea id="card-description" name="description" rows="3" class="form-textarea"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="card-label">Label</label>
+                        <select id="card-label" name="label" class="form-select">
+                            <option value="">None</option>
+                            <option value="task">Task</option>
+                            <option value="bug">Bug</option>
+                            <option value="feature">Feature</option>
+                            <option value="enhancement">Enhancement</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="card-form" class="btn btn-primary">Save</button>
+                <button type="button" id="cancel-card-btn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

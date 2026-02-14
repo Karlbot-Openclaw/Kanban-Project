@@ -633,6 +633,32 @@ button:focus {
   vertical-align: middle;
 }
 
+/* Label color variants */
+.label-blue {
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+}
+
+.label-red {
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+.label-green {
+  background-color: #dcfce7 !important;
+  color: #166534 !important;
+}
+
+.label-purple {
+  background-color: #f3e8ff !important;
+  color: #6b21a8 !important;
+}
+
+.label-gray {
+  background-color: #f3f4f6 !important;
+  color: #374151 !important;
+}
+
 /* Column styling */
 .column {
   border-radius: 16px;

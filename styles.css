@@ -1070,22 +1070,28 @@ button:focus {
 }
 
 .card-complete-btn {
-  background-color: #10b981;
-  border-radius: 50%;
   width: 24px;
   height: 24px;
+  border-radius: 50%;
+  background-color: #f0fdf4; /* Very faint green (emerald-50) */
+  color: #86efac; /* Light green icon (emerald-400) */
+  border: 1px solid #dcfce7; /* Light green border (emerald-100) */
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .card-complete-btn:hover {
-  background-color: #059669;
+  background-color: #dcfce7; /* Slightly more green on hover (emerald-100) */
+  color: #166534; /* Darker green on hover (emerald-800) */
+  border-color: #bbf7d0; /* Slightly darker border (emerald-200) */
+  transform: scale(1.05);
 }
 
 .card-complete-btn svg {
-  color: white;
   width: 14px;
   height: 14px;
 }

@@ -300,11 +300,44 @@ button:focus {
   border-radius: 12px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  max-width: 300px; /* Prevent cards from becoming too wide */
+  word-wrap: break-word; /* Break long words */
+  overflow-wrap: break-word; /* Modern equivalent */
+}
+
+.card h4 {
+  word-break: break-word; /* Break long title words */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Title max 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card:hover {
   border-color: #d1d5db;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Card description text truncation */
+.card p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Show max 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  max-height: 4.5em; /* Fallback for non-webkit browsers */
+  word-break: break-word; /* Break extremely long words */
+}
+
+/* Card label - ensure it doesn't overflow */
+.card .label {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 /* Column styling */

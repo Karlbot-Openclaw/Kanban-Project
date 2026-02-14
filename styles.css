@@ -463,10 +463,6 @@ body {
 
 /* Mobile-first responsive design (backup) */
 @media (max-width: 768px) {
-  .columns-container {
-    flex-direction: column;
-  }
-  
   .header-buttons {
     flex-direction: column;
     gap: 2px;
@@ -480,7 +476,7 @@ body {
   }
   
   .column {
-    min-width: 100%;
+    min-width: 280px;
     width: 100%;
     margin-bottom: 16px;
   }
@@ -640,7 +636,7 @@ button:focus {
   border: 1px solid #e5e7eb;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   
-  /* Responsive width: flexible on mobile, fixed min on desktop */
+  /* Responsive width: flexible to shrink on mobile, minimum 280px */
   flex: 1 1 0;
   min-width: 280px;
   width: 100%;

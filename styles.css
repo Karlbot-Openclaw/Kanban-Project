@@ -142,17 +142,20 @@ header h1 {
   box-shadow: var(--shadow-sm) !important;
   flex: 0 0 300px;
   width: 300px;
+  min-width: 0; /* Allow column to shrink below content size */
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   position: relative;
   z-index: 1;
-  overflow: hidden;
 }
 
 .column-header {
-  position: relative;
-  z-index: 10;
+  position: sticky;
+  top: 0;
+  z-index: 20;
   background-color: var(--bg-secondary);
   padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 8px;
 }
 
 .column:hover {
@@ -218,7 +221,9 @@ header h1 {
   box-shadow: var(--shadow-sm) !important;
   padding: 12px !important;
   margin: 4px 0 !important;
-  max-width: 300px;
+  width: 100%; /* Fill column width */
+  max-width: 100%; /* Prevent overflow */
+  box-sizing: border-box;
   transition: all 0.2s ease;
   word-wrap: break-word;
   overflow-wrap: break-word;

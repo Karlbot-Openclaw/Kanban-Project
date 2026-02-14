@@ -595,6 +595,7 @@ button:focus {
   box-sizing: border-box; /* Include padding in width */
   word-wrap: break-word; /* Break long words */
   overflow-wrap: break-word; /* Modern equivalent */
+  word-break: break-word; /* More aggressive word breaking */
 }
 
 .card h4 {

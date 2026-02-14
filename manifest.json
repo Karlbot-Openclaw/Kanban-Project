@@ -1,0 +1,9 @@
+{
+  "name": "Kanban Board",
+  "short_name": "Kanban",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#3b82f6",
+  "orientation": "any"
+}

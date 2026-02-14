@@ -1,0 +1,23 @@
+{
+  "name": "workspace-dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "daily-digest.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Karlbot-Openclaw/Kanban-Project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Karlbot-Openclaw/Kanban-Project/issues"
+  },
+  "homepage": "https://github.com/Karlbot-Openclaw/Kanban-Project#readme",
+  "dependencies": {
+    "nodemailer": "^8.0.1"
+  }
+}

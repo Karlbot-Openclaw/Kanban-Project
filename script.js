@@ -14,6 +14,18 @@ class KanbanBoard {
             this.addColumn();
         });
 
+        // Global add card button (adds to first column)
+        const globalAddCardBtn = document.getElementById('add-card-btn');
+        if (globalAddCardBtn) {
+            globalAddCardBtn.addEventListener('click', () => {
+                if (this.columns.length === 0) {
+                    alert('Please create a column first.');
+                    return;
+                }
+                this.showCardModal(this.columns[0].id);
+            });
+        }
+
         // Card modal form
         document.getElementById('card-form').addEventListener('submit', (e) => {
             e.preventDefault();

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="icon-btn theme-toggle" aria-label="Toggle theme">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <h1 class="app-title">Kanban Board</h1>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-primary add-column-btn">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span class="btn-text">Add Column</span>
+                </button>
+                <button class="btn btn-secondary add-card-btn">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span class="btn-text">Add Card</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="board">
+        <div class="columns-container">
+            <div class="column">
+                <div class="column-header">
+                    <h3 class="column-title">To Do</h3>
+                    <button class="icon-btn column-menu-btn" aria-label="Column menu">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="5" r="2"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <circle cx="12" cy="19" r="2"></circle>
+                        </svg>
+                    </button>
+                </div>
+                <div class="cards">
+                    <div class="card">
+                        <h4>Design homepage mockup</h4>
+                        <p>Create the initial design mockups for the homepage layout</p>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3 class="column-title">In Progress</h3>
+                    <button class="icon-btn column-menu-btn" aria-label="Column menu">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="5" r="2"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <circle cx="12" cy="19" r="2"></circle>
+                        </svg>
+                    </button>
+                </div>
+                <div class="cards">
+                    <div class="card">
+                        <h4>Implement authentication</h4>
+                        <p>Add OAuth2 login flow with Google and GitHub</p>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3 class="column-title">Done</h3>
+                    <button class="icon-btn column-menu-btn" aria-label="Column menu">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="5" r="2"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <circle cx="12" cy="19" r="2"></circle>
+                        </svg>
+                    </button>
+                </div>
+                <div class="cards">
+                    <div class="card">
+                        <h4>Set up project repository</h4>
+                        <p>Initialize git repo and add initial documentation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,11 +1,72 @@
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBx8zD40Nf-AMsDWIaZezUsqvpmeNtw6qc",
+  authDomain: "kanban-board-karl-openclaw.firebaseapp.com",
+  projectId: "kanban-board-karl-openclaw",
+  storageBucket: "kanban-board-karl-openclaw.firebasestorage.app",
+  messagingSenderId: "464745209478",
+  appId: "1:464745209478:web:a3db560b52b0c4af7afb07"
+};
+
+// Initialize Firebase (using compat namespace)
+let db;
+try {
+  if (typeof firebase !== 'undefined') {
+    const app = firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    console.log('Firebase initialized');
+  } else {
+    console.error('Firebase SDK not loaded');
+  }
+} catch (error) {
+  console.error('Firebase initialization failed:', error);
+}
+
+// Firestore data service
+const FirestoreService = {
+  async load() {
+    if (!db) return { columns: [] };
+    try {
+      const docRef = db.collection('board').doc('state');
+      const doc = await docRef.get();
+      return doc.exists ? doc.data() : { columns: [] };
+    } catch (error) {
+      console.error('Error loading from Firestore:', error);
+      return { columns: [] };
+    }
+  },
+
+  async save(columns) {
+    if (!db) return;
+    try {
+      await db.collection('board').doc('state').set({
+        columns: columns,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error saving to Firestore:', error);
+    }
+  }
+};
+
 class KanbanBoard {
     constructor() {
         this.columns = [];
         this.currentCardModalColumn = null;
         this.currentCardModalCard = null;
         this.initializeEventListeners();
-        this.loadFromLocalStorage();
+        this.loadFromFirestore(); // Use Firestore instead of localStorage
         this.render();
+    }
+
+    async loadFromFirestore() {
+        const data = await FirestoreService.load();
+        this.columns = data.columns || [];
+        this.render(); // Re-render after loading
+    }
+
+    save() {
+        FirestoreService.save(this.columns);
     }
 
     initializeEventListeners() {
@@ -47,7 +108,7 @@ class KanbanBoard {
                 cards: []
             };
             this.columns.push(column);
-            this.saveToLocalStorage();
+            this.save();
             this.render();
         }
     }
@@ -63,7 +124,7 @@ class KanbanBoard {
                 timestamp: new Date().toISOString()
             };
             column.cards.push(card);
-            this.saveToLocalStorage();
+            this.save();
             this.render();
         }
     }
@@ -74,7 +135,7 @@ class KanbanBoard {
             const card = column.cards.find(c => c.id === cardId);
             if (card) {
                 Object.assign(card, updatedData);
-                this.saveToLocalStorage();
+                this.save();
                 this.render();
             }
         }
@@ -84,14 +145,14 @@ class KanbanBoard {
         const column = this.columns.find(col => col.id === columnId);
         if (column) {
             column.cards = column.cards.filter(c => c.id !== cardId);
-            this.saveToLocalStorage();
+            this.save();
             this.render();
         }
     }
 
     deleteColumn(columnId) {
         this.columns = this.columns.filter(col => col.id !== columnId);
-        this.saveToLocalStorage();
+        this.save();
         this.render();
     }
 
@@ -104,7 +165,7 @@ class KanbanBoard {
             if (card) {
                 fromColumn.cards = fromColumn.cards.filter(c => c.id !== cardId);
                 toColumn.cards.push(card);
-                this.saveToLocalStorage();
+                this.save();
                 this.render();
             }
         }
@@ -216,7 +277,7 @@ class KanbanBoard {
             const newTitle = prompt('Edit column name:', column.title);
             if (newTitle && newTitle !== column.title) {
                 column.title = newTitle;
-                this.saveToLocalStorage();
+                this.save();
                 this.render();
             }
         });
@@ -373,25 +434,7 @@ class KanbanBoard {
         });
     }
 
-    saveToLocalStorage() {
-        const data = {
-            columns: this.columns,
-            timestamp: new Date().toISOString()
-        };
-        localStorage.setItem('kanban-board-data', JSON.stringify(data));
-    }
 
-    loadFromLocalStorage() {
-        const stored = localStorage.getItem('kanban-board-data');
-        if (stored) {
-            try {
-                const data = JSON.parse(stored);
-                this.columns = data.columns || [];
-            } catch (error) {
-                console.error('Error loading from localStorage:', error);
-            }
-        }
-    }
 }
 
 // Initialize the board when DOM is loaded

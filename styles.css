@@ -467,9 +467,18 @@ select:focus {
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
   .column {
-    min-width: 280px !important;
+    flex: 0 0 auto !important;
     width: 100% !important;
+    min-width: 280px !important;
     margin-bottom: 16px !important;
+  }
+  
+  .column-header {
+    position: static !important;
+    background-color: var(--bg-secondary);
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 8px;
   }
   
   header .flex {
@@ -485,7 +494,7 @@ select:focus {
 @media (max-width: 480px) {
   .column {
     min-width: 100% !important;
-    flex: 1 1 100% !important;
+    flex: 0 0 100% !important;
   }
 }
 

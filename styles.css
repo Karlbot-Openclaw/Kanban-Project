@@ -2,6 +2,170 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Dark mode support */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+:root[data-theme="dark"] body {
+  background-color: #111827;
+  color: #f3f4f6;
+}
+
+:root[data-theme="dark"] .bg-white {
+  background-color: #1f2937 !important;
+}
+
+:root[data-theme="dark"] .text-gray-900 {
+  color: #f9fafb !important;
+}
+
+:root[data-theme="dark"] .text-gray-700,
+:root[data-theme="dark"] .text-gray-600 {
+  color: #d1d5db !important;
+}
+
+:root[data-theme="dark"] .border-gray-200 {
+  border-color: #374151 !important;
+}
+
+:root[data-theme="dark"] .bg-gray-50 {
+  background-color: #1f2937 !important;
+}
+
+:root[data-theme="dark"] .column {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+:root[data-theme="dark"] .column-title {
+  color: #f9fafb !important;
+}
+
+:root[data-theme="dark"] .card {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+:root[data-theme="dark"] .card:hover {
+  border-color: #6b7280 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+:root[data-theme="dark"] .modal-content {
+  background-color: #1f2937 !important;
+}
+
+:root[data-theme="dark"] .form-input,
+:root[data-theme="dark"] .form-textarea,
+:root[data-theme="dark"] .form-select {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  color: #f9fafb !important;
+}
+
+:root[data-theme="dark"] .form-label {
+  color: #d1d5db !important;
+}
+
+:root[data-theme="dark"] .badge-blue {
+  background-color: #1e3a5f !important;
+  color: #93c5fd !important;
+}
+
+:root[data-theme="dark"] .badge-red {
+  background-color: #5f1e1e !important;
+  color: #fca5a5 !important;
+}
+
+:root[data-theme="dark"] .badge-green {
+  background-color: #1e5f3a !important;
+  color: #86efac !important;
+}
+
+:root[data-theme="dark"] .badge-purple {
+  background-color: #3b1e5f !important;
+  color: #c4b5fd !important;
+}
+
+/* Custom CSS for mobile responsiveness */
+
+:root[data-theme="dark"] .bg-white {
+  background-color: #1f2937 !important;
+}
+
+:root[data-theme="dark"] .text-gray-900 {
+  color: #f9fafb !important;
+}
+
+:root[data-theme="dark"] .text-gray-700,
+:root[data-theme="dark"] .text-gray-600 {
+  color: #d1d5db !important;
+}
+
+:root[data-theme="dark"] .border-gray-200 {
+  border-color: #374151 !important;
+}
+
+:root[data-theme="dark"] .bg-gray-50 {
+  background-color: #1f2937 !important;
+}
+
+:root[data-theme="dark"] .column {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+:root[data-theme="dark"] .column-title {
+  color: #f9fafb !important;
+}
+
+:root[data-theme="dark"] .card {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+:root[data-theme="dark"] .card:hover {
+  border-color: #6b7280 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+:root[data-theme="dark"] .modal-content {
+  background-color: #1f2937 !important;
+}
+
+:root[data-theme="dark"] .form-input,
+:root[data-theme="dark"] .form-textarea,
+:root[data-theme="dark"] .form-select {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  color: #f9fafb !important;
+}
+
+:root[data-theme="dark"] .form-label {
+  color: #d1d5db !important;
+}
+
+:root[data-theme="dark"] .badge-blue {
+  background-color: #1e3a5f !important;
+  color: #93c5fd !important;
+}
+
+:root[data-theme="dark"] .badge-red {
+  background-color: #5f1e1e !important;
+  color: #fca5a5 !important;
+}
+
+:root[data-theme="dark"] .badge-green {
+  background-color: #1e5f3a !important;
+  color: #86efac !important;
+}
+
+:root[data-theme="dark"] .badge-purple {
+  background-color: #3b1e5f !important;
+  color: #c4b5fd !important;
+}
+
 /* Custom CSS for mobile responsiveness */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;

@@ -55,9 +55,11 @@ class KanbanBoard {
         this.currentCardModalColumn = null;
         this.currentCardModalCard = null;
         this.initializeEventListeners();
-        this.loadFromFirestore(); // Use Firestore instead of localStorage
-        this.initializeTheme();
-        this.render();
+        this.loadFromFirestore().then(() => {
+            this.ensureCompletedColumn();
+            this.initializeTheme();
+            this.render();
+        });
     }
 
     initializeTheme() {
@@ -219,6 +221,33 @@ class KanbanBoard {
         this.render();
     }
 
+    ensureCompletedColumn() {
+        const completedColumn = this.columns.find(col => col.title.toLowerCase() === 'completed');
+        if (!completedColumn) {
+            const completedColumnData = {
+                id: 'completed-column',
+                title: 'Completed',
+                cards: []
+            };
+            this.columns.push(completedColumnData);
+            this.save();
+        }
+    }
+
+    completeCard(cardId, fromColumnId) {
+        const completedColumn = this.columns.find(col => col.id === 'completed-column');
+        if (!completedColumn) {
+            this.ensureCompletedColumn();
+            // Re-find after creation
+            const newCompleted = this.columns.find(col => col.id === 'completed-column');
+            if (newCompleted) {
+                this.moveCard(cardId, fromColumnId, newCompleted.id);
+            }
+        } else {
+            this.moveCard(cardId, fromColumnId, completedColumn.id);
+        }
+    }
+
     swapColumn(columnId, direction) {
         const index = this.columns.findIndex(col => col.id === columnId);
         if (index === -1) return;
@@ -246,6 +275,10 @@ class KanbanBoard {
             if (card) {
                 fromColumn.cards = fromColumn.cards.filter(c => c.id !== cardId);
                 toColumn.cards.push(card);
+                
+                // Update completed flag based on destination column
+                card.completed = (toColumnId === 'completed-column');
+                
                 this.save();
                 this.render();
             }
@@ -411,6 +444,11 @@ class KanbanBoard {
         const titleElement = cardElement.querySelector('h4');
         titleElement.textContent = card.title;
         
+        // Apply completed styling if card is completed
+        if (card.completed) {
+            cardElement.querySelector('.card').classList.add('card-completed');
+        }
+        
         // Set card description
         const descriptionElement = cardElement.querySelector('p');
         descriptionElement.textContent = card.description;
@@ -435,17 +473,30 @@ class KanbanBoard {
         // Card actions
         const actions = cardElement.querySelectorAll('button');
         
-        // Edit card
-        actions[0].addEventListener('click', () => {
-            this.showCardModal(columnId, card.id);
-        });
+        // Edit card (actions[0])
+        if (actions[0]) {
+            actions[0].addEventListener('click', () => {
+                this.showCardModal(columnId, card.id);
+            });
+        }
         
-        // Delete card
-        actions[1].addEventListener('click', () => {
-            if (confirm(`Delete card "${card.title}"?`)) {
-                this.deleteCard(columnId, card.id);
-            }
-        });
+        // Complete card - checkmark button (actions[1] if present)
+        const completeBtn = cardElement.querySelector('.card-complete-btn');
+        if (completeBtn) {
+            completeBtn.addEventListener('click', () => {
+                this.completeCard(card.id, columnId);
+            });
+        }
+        
+        // Delete card (actions[2] if complete exists, else actions[1])
+        const deleteBtn = actions[completeBtn ? 2 : 1];
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', () => {
+                if (confirm(`Delete card "${card.title}"?`)) {
+                    this.deleteCard(columnId, card.id);
+                }
+            });
+        }
         
         // Make card draggable
         const cardDiv = cardElement.querySelector('.card');
@@ -475,17 +526,14 @@ class KanbanBoard {
         return cardElement;
     }
 
-    ensureCompletedColumn() {
-        const completedColumn = this.columns.find(col => col.title.toLowerCase() === 'completed');
-        if (!completedColumn) {
-            const completedColumnData = {
-                id: 'completed-column',
-                title: 'Completed',
-                cards: []
-            };
-            this.columns.push(completedColumnData);
-            this.save();
-        }
+    getLabelColor(label) {
+        const colors = {
+            'task': 'blue',
+            'bug': 'red',
+            'feature': 'purple',
+            'enhancement': 'green'
+        };
+        return colors[label] || 'gray';
     }
 
     // Drag and drop using event delegation

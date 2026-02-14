@@ -673,6 +673,46 @@ button:focus {
   width: 100%;
 }
 
+/* Completed column styling */
+.column-title:has(+ .cards-container .card-completed) ~ .add-card-btn,
+.column:has(.card-completed) {
+  background-color: #f0fdf4; /* Light green background */
+  border-color: #bbf7d0;
+}
+
+/* Completed card styling */
+.card-completed {
+  opacity: 0.6;
+}
+
+.card-completed h4 {
+  text-decoration: line-through;
+  text-decoration-color: var(--color-danger, #ef4444);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+/* Checkmark button styling */
+.card-complete-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #86efac;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.card-complete-btn:hover {
+  background-color: #16a34a;
+  color: white;
+  transform: scale(1.1);
+}
+
 /* Column move buttons */
 .column .move-left-btn,
 .column .move-right-btn {

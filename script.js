@@ -191,11 +191,13 @@ class KanbanBoard {
         titleElement.textContent = column.title;
         titleElement.setAttribute('data-column-id', column.id);
         
-        // Add card button
-        const addCardBtn = columnElement.querySelector('button:last-of-type');
-        addCardBtn.addEventListener('click', () => {
-            this.showCardModal(column.id);
-        });
+        // Add card button inside column
+        const addCardBtn = columnElement.querySelector('.add-card-btn');
+        if (addCardBtn) {
+            addCardBtn.addEventListener('click', () => {
+                this.showCardModal(column.id);
+            });
+        }
         
         // Cards container
         const cardsContainer = columnElement.querySelector('.cards-container');

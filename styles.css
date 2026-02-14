@@ -92,6 +92,8 @@ header {
   background-color: var(--bg-secondary) !important;
   border-bottom: 1px solid var(--border-color) !important;
   box-shadow: var(--shadow-sm) !important;
+  position: relative;
+  z-index: 100;
 }
 
 header h1 {
@@ -483,10 +485,20 @@ select:focus {
   header .flex {
     flex-direction: column;
     gap: 12px;
+    position: relative;
+    z-index: 100;
+    background-color: var(--bg-secondary);
+    padding: 12px 0;
   }
   
   header .flex > div:last-child {
     justify-content: center;
+    width: 100%;
+  }
+  
+  /* Ensure header stays above content */
+  body {
+    padding-top: 0;
   }
 }
 

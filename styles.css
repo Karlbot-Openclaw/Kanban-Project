@@ -960,29 +960,84 @@ button:focus {
   border: 0;
 }
 
-/* Print styles */
-@media print {
-  .btn,
-  .modal,
-  .header,
-  .move-left-btn,
-  .move-right-btn,
-  .delete-column-btn,
-  .delete-card-btn,
-  .edit-column-btn,
-  .add-card-btn {
-    display: none !important;
-  }
-  
-  .column {
-    break-inside: avoid;
-    page-break-inside: avoid;
-    border: 1px solid #ccc !important;
-    background: white !important;
-  }
-  
-  .card {
-    background: #f9f9f9 !important;
-    border: 1px solid #ddd !important;
-  }
+.card-completed {
+  opacity: 0.6;
+}
+
+.card-completed h4 {
+  text-decoration: line-through;
+}
+
+.completed-column {
+  background-color: #f0fdf4 !important;
+  border-color: #10b981 !important;
+}
+
+.card-complete-btn {
+  background-color: #10b981;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.card-complete-btn:hover {
+  background-color: #059669;
+}
+
+.card-complete-btn svg {
+  color: white;
+  width: 14px;
+  height: 14px;
+}
+
+/* Visual indicator for completed cards */
+.card-completed::before {
+  content: "\2713";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #10b981;
+  color: white;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Completed column styling */
+.completed-column .column-title {
+  color: #065f46;
+}
+
+.completed-column .column-title::after {
+  content: " (Completed)";
+  font-size: 0.8em;
+  font-weight: normal;
+  margin-left: 4px;
+}
+
+/* Dark mode completed styles */
+[data-theme="dark"] .card-completed {
+  opacity: 0.4;
+}
+
+[data-theme="dark"] .completed-column {
+  background-color: #065f46 !important;
+  border-color: #059669 !important;
+}
+
+[data-theme="dark"] .completed-column .column-title {
+  color: #10b981;
+}
+
+[data-theme="dark"] .completed-column .column-title::after {
+  color: #94fa9e;
 }

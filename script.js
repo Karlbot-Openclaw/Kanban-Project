@@ -475,14 +475,17 @@ class KanbanBoard {
         return cardElement;
     }
 
-    getLabelColor(label) {
-        const colors = {
-            'task': 'blue',
-            'bug': 'red',
-            'feature': 'purple',
-            'enhancement': 'green'
-        };
-        return colors[label] || 'gray';
+    ensureCompletedColumn() {
+        const completedColumn = this.columns.find(col => col.title.toLowerCase() === 'completed');
+        if (!completedColumn) {
+            const completedColumnData = {
+                id: 'completed-column',
+                title: 'Completed',
+                cards: []
+            };
+            this.columns.push(completedColumnData);
+            this.save();
+        }
     }
 
     // Drag and drop using event delegation

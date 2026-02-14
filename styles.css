@@ -467,10 +467,9 @@ select:focus {
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
   .column {
-    flex: 0 0 auto !important;
+    flex: 0 0 100% !important;
     width: 100% !important;
-    min-width: 280px !important;
-    margin-bottom: 16px !important;
+    min-width: 0 !important;
   }
   
   .column-header {
@@ -493,8 +492,9 @@ select:focus {
 
 @media (max-width: 480px) {
   .column {
-    min-width: 100% !important;
     flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
   }
 }
 

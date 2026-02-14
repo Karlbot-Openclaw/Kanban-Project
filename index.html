@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kanban Project Board</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="styles.css?v=4">
+    <link rel="stylesheet" href="styles.css?v=5">
     <script>
         // Apply dark mode from localStorage
         document.addEventListener('DOMContentLoaded', () => {
@@ -48,11 +48,8 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="flex gap-4 overflow-x-auto">
+        <div id="columns-container" class="flex gap-4 overflow-x-auto">
             <!-- Columns will be dynamically added here -->
-            <div id="columns-container" class="flex gap-4 min-w-max">
-                <!-- Column template will be inserted here -->
-            </div>
         </div>
     </main>
 
@@ -160,6 +157,6 @@
 
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
-    <script src="script.js?v=4"></script>
+    <script src="script.js?v=5"></script>
 </body>
 </html>

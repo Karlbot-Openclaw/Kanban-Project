@@ -219,10 +219,10 @@ header h1 {
   border: 1px solid var(--border-color) !important;
   border-radius: 10px !important;
   box-shadow: var(--shadow-sm) !important;
-  padding: 12px !important;
-  margin: 4px 0 !important;
-  width: 100%; /* Fill column width */
-  max-width: 100%; /* Prevent overflow */
+  padding: 10px !important;
+  margin: 6px 8px !important;
+  width: auto;
+  max-width: calc(100% - 16px); /* Account for horizontal margin */
   box-sizing: border-box;
   transition: all 0.2s ease;
   word-wrap: break-word;

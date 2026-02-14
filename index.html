@@ -57,9 +57,21 @@
     </main>
 
     <template id="column-template">
-        <div class="column min-w-[300px] bg-white rounded-lg shadow-lg p-4">
+        <div class="column min-w-[300px] bg-white rounded-lg shadow-lg p-4" data-column-id="">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">Column Title</h3>
+                <div class="flex items-center space-x-2">
+                    <button class="text-gray-400 hover:text-gray-600 transition-colors move-left-btn">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <h3 class="text-lg font-semibold text-gray-900 column-title">Column Title</h3>
+                    <button class="text-gray-400 hover:text-gray-600 transition-colors move-right-btn">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
                 <div class="flex space-x-2">
                     <button class="text-gray-400 hover:text-gray-600 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -87,6 +87,34 @@ class KanbanBoard {
             });
         }
 
+        // Column move buttons (using event delegation)
+        document.addEventListener('click', (e) => {
+            const column = e.target.closest('.column');
+            if (!column) return;
+            
+            const columnId = column.dataset.columnId;
+            
+            if (e.target.closest('.move-left-btn')) {
+                this.swapColumn(columnId, 'left');
+            } else if (e.target.closest('.move-right-btn')) {
+                this.swapColumn(columnId, 'right');
+            }
+        });
+
+        // Delete column button
+        document.addEventListener('click', (e) => {
+            const button = e.target.closest('.delete-column-btn');
+            if (button) {
+                const column = button.closest('.column');
+                if (column) {
+                    const columnId = column.dataset.columnId;
+                    if (confirm(`Delete column "${column.querySelector('.column-title').textContent}"?`)) {
+                        this.deleteColumn(columnId);
+                    }
+                }
+            }
+        });
+
         // Card modal form
         document.getElementById('card-form').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -152,6 +180,24 @@ class KanbanBoard {
 
     deleteColumn(columnId) {
         this.columns = this.columns.filter(col => col.id !== columnId);
+        this.save();
+        this.render();
+    }
+
+    swapColumn(columnId, direction) {
+        const index = this.columns.findIndex(col => col.id === columnId);
+        if (index === -1) return;
+        
+        const targetIndex = direction === 'left' ? index - 1 : index + 1;
+        
+        // Check bounds
+        if (targetIndex < 0 || targetIndex >= this.columns.length) {
+            return; // Can't move beyond first/last column
+        }
+        
+        // Swap columns in array
+        [this.columns[index], this.columns[targetIndex]] = [this.columns[targetIndex], this.columns[index]];
+        
         this.save();
         this.render();
     }

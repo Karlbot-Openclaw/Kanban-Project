@@ -351,6 +351,30 @@ button:focus {
   width: 300px;
 }
 
+/* Column move buttons */
+.column .move-left-btn,
+.column .move-right-btn {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.column .move-left-btn:hover,
+.column .move-right-btn:hover {
+  opacity: 0.8;
+}
+
+/* Enable buttons based on position - will be toggled by JS */
+.column:not(:first-child) .move-left-btn {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.column:not(:last-child) .move-right-btn {
+  opacity: 1;
+  cursor: pointer;
+}
+
 .column-header {
   padding: 16px;
 }

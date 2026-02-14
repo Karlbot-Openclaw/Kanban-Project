@@ -111,6 +111,7 @@
                 <div class="flex items-center space-x-2">
                     <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Task</span>
                     <span class="text-xs text-gray-500">Today</span>
+                    <span class="card-checklist-progress text-xs text-green-600 font-medium"></span>
                 </div>
                 <div class="flex space-x-1">
                     <button class="text-gray-400 hover:text-green-600 transition-colors card-complete-btn" title="Complete card">
@@ -152,6 +153,21 @@
                             <option value="feature">Feature</option>
                             <option value="enhancement">Enhancement</option>
                         </select>
+                    </div>
+                    
+                    <!-- Checklist Section -->
+                    <div class="form-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="form-label mb-0">Checklist</label>
+                            <span id="checklist-progress" class="text-xs text-gray-500"></span>
+                        </div>
+                        <div id="checklist-items" class="space-y-2 mb-3">
+                            <!-- Checklist items will be rendered here -->
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="text" id="checklist-new-item" class="form-input flex-1" placeholder="Add checklist item...">
+                            <button type="button" id="add-checklist-item" class="btn btn-secondary">Add</button>
+                        </div>
                     </div>
                 </form>
             </div>

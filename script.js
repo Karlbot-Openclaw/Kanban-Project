@@ -186,7 +186,8 @@ class KanbanBoard {
                 title: cardData.title,
                 description: cardData.description || '',
                 label: cardData.label || '',
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                checklist: [] // Array of { id, text, completed }
             };
             column.cards.push(card);
             this.save();
@@ -219,6 +220,51 @@ class KanbanBoard {
         this.columns = this.columns.filter(col => col.id !== columnId);
         this.save();
         this.render();
+    }
+
+    // Checklist methods
+    addChecklistItem(cardId, text) {
+        for (const column of this.columns) {
+            const card = column.cards.find(c => c.id === cardId);
+            if (card) {
+                if (!card.checklist) card.checklist = [];
+                card.checklist.push({
+                    id: Date.now().toString(),
+                    text: text,
+                    completed: false
+                });
+                this.save();
+                this.render();
+                return;
+            }
+        }
+    }
+
+    toggleChecklistItem(cardId, itemId) {
+        for (const column of this.columns) {
+            const card = column.cards.find(c => c.id === cardId);
+            if (card && card.checklist) {
+                const item = card.checklist.find(i => i.id === itemId);
+                if (item) {
+                    item.completed = !item.completed;
+                    this.save();
+                    this.render();
+                    return;
+                }
+            }
+        }
+    }
+
+    deleteChecklistItem(cardId, itemId) {
+        for (const column of this.columns) {
+            const card = column.cards.find(c => c.id === cardId);
+            if (card && card.checklist) {
+                card.checklist = card.checklist.filter(i => i.id !== itemId);
+                this.save();
+                this.render();
+                return;
+            }
+        }
     }
 
     ensureCompletedColumn() {
@@ -300,18 +346,118 @@ class KanbanBoard {
             if (card) {
                 form.title.value = card.title;
                 form.description.value = card.description;
-                form.label.value = card.label;
+                form.label.value = card.label || '';
                 
                 this.currentCardModalColumn = columnId;
                 this.currentCardModalCard = cardId;
+                
+                // Render checklist items
+                this.renderChecklistItems(card);
             }
         } else {
             // New card
             this.currentCardModalColumn = columnId;
             this.currentCardModalCard = null;
+            // Clear checklist for new card
+            document.getElementById('checklist-items').innerHTML = '';
         }
         
+        // Update progress indicator
+        this.updateChecklistProgress();
+        
         modal.classList.remove('hidden');
+        
+        // Setup checklist listeners
+        this.setupChecklistListeners();
+    }
+
+    getCurrentCard() {
+        if (!this.currentCardModalColumn || !this.currentCardModalCard) return null;
+        const column = this.columns.find(col => col.id === this.currentCardModalColumn);
+        if (column) {
+            return column.cards.find(c => c.id === this.currentCardModalCard);
+        }
+        return null;
+    }
+
+    renderChecklistItems(card) {
+        const container = document.getElementById('checklist-items');
+        container.innerHTML = '';
+        
+        if (card.checklist && card.checklist.length > 0) {
+            card.checklist.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `checklist-item ${item.completed ? 'completed' : ''}`;
+                itemDiv.innerHTML = `
+                    <input type="checkbox" ${item.completed ? 'checked' : ''} data-item-id="${item.id}">
+                    <span class="checklist-item-text">${this.escapeHtml(item.text)}</span>
+                    <span class="checklist-item-delete" data-item-id="${item.id}">&times;</span>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+        
+        this.updateChecklistProgress();
+    }
+
+    updateChecklistProgress() {
+        const card = this.getCurrentCard();
+        const progressEl = document.getElementById('checklist-progress');
+        
+        if (card && card.checklist && card.checklist.length > 0) {
+            const completed = card.checklist.filter(i => i.completed).length;
+            const total = card.checklist.length;
+            progressEl.textContent = `${completed}/${total} completed`;
+        } else {
+            progressEl.textContent = '';
+        }
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    setupChecklistListeners() {
+        const addBtn = document.getElementById('add-checklist-item');
+        const newItemInput = document.getElementById('checklist-new-item');
+        const checklistContainer = document.getElementById('checklist-items');
+        
+        // Add new checklist item
+        addBtn.addEventListener('click', () => {
+            const text = newItemInput.value.trim();
+            if (text && this.currentCardModalCard) {
+                this.addChecklistItem(this.currentCardModalCard, text);
+                newItemInput.value = '';
+                // Re-render checklist
+                const card = this.getCurrentCard();
+                this.renderChecklistItems(card);
+            }
+        });
+        
+        // Allow Enter key to add
+        newItemInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addBtn.click();
+            }
+        });
+        
+        // Event delegation for checklist items (toggle checkbox, delete)
+        checklistContainer.addEventListener('click', (e) => {
+            const itemId = e.target.dataset.itemId;
+            if (!itemId) return;
+            
+            if (e.target.type === 'checkbox') {
+                this.toggleChecklistItem(this.currentCardModalCard, itemId);
+                const card = this.getCurrentCard();
+                this.renderChecklistItems(card);
+            } else if (e.target.classList.contains('checklist-item-delete')) {
+                this.deleteChecklistItem(this.currentCardModalCard, itemId);
+                const card = this.getCurrentCard();
+                this.renderChecklistItems(card);
+            }
+        });
     }
 
     hideCardModal() {
@@ -469,6 +615,16 @@ class KanbanBoard {
         const timestampElement = cardElement.querySelector('span:nth-of-type(2)');
         const date = new Date(card.timestamp);
         timestampElement.textContent = date.toLocaleDateString();
+        
+        // Set checklist progress indicator
+        if (card.checklist && card.checklist.length > 0) {
+            const completed = card.checklist.filter(i => i.completed).length;
+            const total = card.checklist.length;
+            const progressElement = cardElement.querySelector('.card-checklist-progress');
+            if (progressElement) {
+                progressElement.textContent = `✓ ${completed}/${total}`;
+            }
+        }
         
         // Card actions
         const actions = cardElement.querySelectorAll('button');

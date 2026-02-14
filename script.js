@@ -56,7 +56,26 @@ class KanbanBoard {
         this.currentCardModalCard = null;
         this.initializeEventListeners();
         this.loadFromFirestore(); // Use Firestore instead of localStorage
+        this.initializeTheme();
         this.render();
+    }
+
+    initializeTheme() {
+        // Apply dark mode from localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) themeToggle.classList.add('active');
+        }
+        
+        // Apply colorblind mode from localStorage
+        const savedColorblind = localStorage.getItem('colorblind-mode');
+        if (savedColorblind === 'true') {
+            document.body.classList.add('colorblind-mode');
+            const colorblindToggle = document.getElementById('colorblind-toggle');
+            if (colorblindToggle) colorblindToggle.classList.add('active');
+        }
     }
 
     async loadFromFirestore() {
@@ -74,6 +93,22 @@ class KanbanBoard {
         document.getElementById('add-column-btn').addEventListener('click', () => {
             this.addColumn();
         });
+
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                this.toggleTheme();
+            });
+        }
+
+        // Colorblind toggle
+        const colorblindToggle = document.getElementById('colorblind-toggle');
+        if (colorblindToggle) {
+            colorblindToggle.addEventListener('click', () => {
+                this.toggleColorblindMode();
+            });
+        }
 
         // Global add card button (adds to first column)
         const globalAddCardBtn = document.getElementById('add-card-btn');
@@ -125,6 +160,38 @@ class KanbanBoard {
         document.getElementById('cancel-card-btn').addEventListener('click', () => {
             this.hideCardModal();
         });
+    }
+
+    toggleTheme() {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        const themeToggle = document.getElementById('theme-toggle');
+        if (newTheme === 'dark') {
+            themeToggle.classList.add('active');
+        } else {
+            themeToggle.classList.remove('active');
+        }
+    }
+
+    toggleColorblindMode() {
+        const body = document.body;
+        const current = body.classList.contains('colorblind-mode');
+        const colorblindToggle = document.getElementById('colorblind-toggle');
+        
+        if (current) {
+            body.classList.remove('colorblind-mode');
+            localStorage.setItem('colorblind-mode', 'false');
+            colorblindToggle.classList.remove('active');
+        } else {
+            body.classList.add('colorblind-mode');
+            localStorage.setItem('colorblind-mode', 'true');
+            colorblindToggle.classList.add('active');
+        }
     }
 
     addColumn() {
@@ -315,6 +382,11 @@ class KanbanBoard {
             cardsContainer.appendChild(cardElement);
         });
         
+        // Set dynamic accent color based on first card's label or default
+        const columnDiv = columnElement.querySelector('.column');
+        const accentColor = this.getColumnAccentColor(column);
+        columnDiv.style.setProperty('--column-accent', accentColor);
+        
         // Column action buttons - use explicit classes to avoid conflicts
         const editBtn = columnElement.querySelector('.edit-column-btn');
         if (editBtn) {
@@ -338,10 +410,29 @@ class KanbanBoard {
         }
         
         // Set column id for data
-        const columnDiv = columnElement.querySelector('.column');
         columnDiv.dataset.columnId = column.id;
         
         return columnElement;
+    }
+
+    getColumnAccentColor(column) {
+        // If column has cards with labels, use the first card's label color
+        if (column.cards && column.cards.length > 0 && column.cards[0].label) {
+            return this.getLabelColorHex(column.cards[0].label);
+        }
+        // Default: gray-500
+        return '#6b7280';
+    }
+
+    getLabelColorHex(label) {
+        const colorMap = {
+            'task': '#3b82f6',      // blue-600
+            'bug': '#ef4444',       // red-500
+            'feature': '#8b5cf6',   // violet-500
+            'enhancement': '#10b981', // emerald-500
+            'default': '#6b7280'    // gray-500
+        };
+        return colorMap[label] || colorMap['default'];
     }
 
     createCardElement(card, columnId) {
@@ -356,11 +447,13 @@ class KanbanBoard {
         const descriptionElement = cardElement.querySelector('p');
         descriptionElement.textContent = card.description;
         
-        // Set card label
+        // Set card label with custom color classes
         const labelElement = cardElement.querySelector('span:first-of-type');
         if (card.label) {
-            labelElement.textContent = card.label.charAt(0).toUpperCase() + card.label.slice(1);
-            labelElement.className = `px-2 py-1 text-xs font-medium bg-${this.getLabelColor(card.label)}-100 text-${this.getLabelColor(card.label)}-800 rounded-full label`;
+            const labelText = card.label.charAt(0).toUpperCase() + card.label.slice(1);
+            labelElement.textContent = labelText;
+            // Use our custom label classes that work with CSS variables
+            labelElement.className = `px-2 py-1 text-xs font-medium rounded-full label label-${this.getLabelColor(card.label)}`;
             labelElement.style.display = 'inline-block';
         } else {
             labelElement.style.display = 'none';
@@ -489,18 +582,6 @@ class KanbanBoard {
 // Initialize the board when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.kanbanBoard = new KanbanBoard();
-    
-    // Set up theme toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        themeToggle.classList.toggle('active');
-        
-        localStorage.setItem('theme', newTheme);
-    });
     
     // Set up drag and drop (event delegation works for all columns)
     window.kanbanBoard.setupDragAndDrop();

@@ -568,12 +568,13 @@ class KanbanBoard {
     }
 
     getLabelColorHex(label) {
+        // Palette: 29339B, 74A4BC, B6D6CC, F1FEC6, FF3A20
         const colorMap = {
-            'task': '#3b82f6',      // blue-600
-            'bug': '#ef4444',       // red-500
-            'feature': '#8b5cf6',   // violet-500
-            'enhancement': '#10b981', // emerald-500
-            'default': '#6b7280'    // gray-500
+            'task': '#29339B',       // deep indigo
+            'bug': '#FF3A20',        // vivid red-orange
+            'feature': '#74A4BC',    // muted sky blue
+            'enhancement': '#B6D6CC', // sage teal
+            'default': '#6b7280'     // gray-500
         };
         return colorMap[label] || colorMap['default'];
     }

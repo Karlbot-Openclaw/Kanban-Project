@@ -4,49 +4,56 @@
 
 /* ===== DESIGN TOKENS & CSS CUSTOM PROPERTIES ===== */
 :root {
-  /* Semantic colors - light mode defaults */
-  --color-primary: #3b82f6; /* Blue 600 */
-  --color-primary-hover: #2563eb; /* Blue 700 */
-  --color-secondary: #6b7280; /* Gray 500 */
-  --color-secondary-hover: #4b5563; /* Gray 600 */
+  /* Palette from coolors.co */
+  --palette-1: #29339B; /* deep indigo - primary */
+  --palette-2: #74A4BC; /* muted sky blue - secondary */
+  --palette-3: #B6D6CC; /* sage teal - tertiary/success */
+  --palette-4: #F1FEC6; /* soft yellow - background/highlight */
+  --palette-5: #FF3A20; /* vivid red-orange - danger/warning */
+
+  /* Semantic colors - light mode defaults based on palette */
+  --color-primary: var(--palette-1);
+  --color-primary-hover: var(--palette-2);
+  --color-secondary: var(--palette-2);
+  --color-secondary-hover: #5a8caa; /* darken palette-2 */
   
   /* Status colors */
-  --color-success: #10b981; /* Emerald 500 */
-  --color-success-light: #d1fae5;
-  --color-warning: #f59e0b; /* Amber 500 */
-  --color-warning-light: #fef3c7;
-  --color-danger: #ef4444; /* Red 500 */
-  --color-danger-light: #fee2e2;
-  --color-info: #06b6d4; /* Cyan 500 */
-  --color-info-light: #cffafe;
+  --color-success: var(--palette-3);
+  --color-success-light: #dbf1e4;
+  --color-warning: var(--palette-4);
+  --color-warning-light: #fff8d1;
+  --color-danger: var(--palette-5);
+  --color-danger-light: #ffdfd9;
+  --color-info: var(--palette-2);
+  --color-info-light: #dcecf7;
   
   /* Background colors */
-  --bg-primary: #f3f4f6; /* Gray 100 */
+  --bg-primary: #f8fafc; /* light cool gray */
   --bg-secondary: #ffffff; /* White */
-  --bg-tertiary: #f9fafb; /* Gray 50 */
-  --bg-hover: #f3f4f6;
+  --bg-tertiary: var(--palette-4); /* soft yellow accent */
+  --bg-hover: #f1f5f9;
   
   /* Text colors */
   --text-primary: #111827; /* Gray 900 */
-  --text-secondary: #4b5563; /* Gray 600 */
-  --text-tertiary: #9ca3af; /* Gray 400 */
+  --text-secondary: #475569; /* cool gray */
+  --text-tertiary: #64748b;
   --text-on-primary: #ffffff;
-  --text-on-dark: #f9fafb;
+  --text-on-dark: #f8fafc;
   
   /* Border colors */
-  --border-color: #e5e7eb; /* Gray 200 */
-  --border-focus: #3b82f6;
+  --border-color: #e2e8f0; /* light cool gray border */
+  --border-focus: var(--palette-1);
   
   /* Column accent (dynamic) */
   --column-accent: transparent;
   
   /* Board background (behind columns) */
-  --board-bg: #f8fafc; /* Slate 50 - light cool gray for light mode */
+  --board-bg: var(--palette-4); /* soft yellow background for board area */
   
   /* Shadow */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 1px 2px 0 rgba(41, 51, 155, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(41, 51, 155, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(41, 51, 155, 0.15);
   
   /* Header height */
   --header-height: 60px;
@@ -54,33 +61,33 @@
 
 /* Dark mode overrides */
 [data-theme="dark"] {
-  --bg-primary: #111827; /* Gray 900 */
-  --bg-secondary: #1f2937; /* Gray 800 */
-  --bg-tertiary: #374151; /* Gray 700 */
-  --bg-hover: #374151;
+  --bg-primary: #0f172a; /* slate 900 - dark background */
+  --bg-secondary: #1e293b; /* slate 800 - cards, modals */
+  --bg-tertiary: var(--palette-3); /* sage teal accent */
+  --bg-hover: #1e293b;
   
-  --board-bg: #0f172a; /* Slate 900 - dark cool gray for dark mode */
+  --board-bg: #020617; /* darkest for board (slate 950) */
   
-  --text-primary: #f9fafb; /* Gray 50 */
-  --text-secondary: #d1d5db; /* Gray 300 */
-  --text-tertiary: #9ca3af; /* Gray 400 */
+  --text-primary: #f8fafc; /* off-white */
+  --text-secondary: #cbd5e1; /* light gray */
+  --text-tertiary: #94a3b8;
   
-  --border-color: #4b5563; /* Gray 600 */
-  --border-focus: #60a5fa; /* Blue 400 */
+  --border-color: #334155; /* dark slate border */
+  --border-focus: var(--palette-2); /* sky blue on focus */
   
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
   
-  /* Status colors in dark mode - slightly brighter */
-  --color-success: #34d399; /* Emerald 400 */
-  --color-success-light: #064e3b;
-  --color-warning: #fbbf24; /* Amber 400 */
-  --color-warning-light: #78350f;
-  --color-danger: #f87171; /* Red 400 */
-  --color-danger-light: #7f1d1d;
-  --color-info: #22d3ee; /* Cyan 400 */
-  --color-info-light: #155e75;
+  /* Status colors in dark mode - use palette directly or slightly adjusted */
+  --color-success: var(--palette-3); /* sage teal */
+  --color-success-light: rgba(182, 214, 204, 0.2);
+  --color-warning: var(--palette-4); /* soft yellow */
+  --color-warning-light: rgba(241, 254, 198, 0.2);
+  --color-danger: var(--palette-5); /* vivid red-orange */
+  --color-danger-light: rgba(255, 58, 32, 0.2);
+  --color-info: var(--palette-2); /* sky blue */
+  --color-info-light: rgba(116, 164, 188, 0.2);
 }
 
 /* ===== GLOBAL STYLES ===== */
@@ -152,23 +159,23 @@ body {
 }
 
 :root[data-theme="dark"] .badge-blue {
-  background-color: #1e3a5f !important;
-  color: #93c5fd !important;
+  background-color: var(--color-info-light) !important;
+  color: var(--color-info) !important;
 }
 
 :root[data-theme="dark"] .badge-red {
-  background-color: #5f1e1e !important;
-  color: #fca5a5 !important;
+  background-color: var(--color-danger-light) !important;
+  color: var(--color-danger) !important;
 }
 
 :root[data-theme="dark"] .badge-green {
-  background-color: #1e5f3a !important;
-  color: #86efac !important;
+  background-color: var(--color-success-light) !important;
+  color: var(--color-success) !important;
 }
 
 :root[data-theme="dark"] .badge-purple {
-  background-color: #3b1e5f !important;
-  color: #c4b5fd !important;
+  background-color: var(--color-info-light) !important;
+  color: var(--color-info) !important;
 }
 
 /* ===== HEADER ===== */
@@ -956,23 +963,23 @@ button:focus {
 }
 
 .badge-blue {
-  background-color: #eff6ff;
-  color: #1d4ed8;
+  background-color: var(--color-info-light);
+  color: var(--color-info);
 }
 
 .badge-red {
-  background-color: #fee2e2;
-  color: #dc2626;
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
 }
 
 .badge-green {
-  background-color: #dcfce7;
-  color: #16a34a;
+  background-color: var(--color-success-light);
+  color: var(--color-success);
 }
 
 .badge-purple {
-  background-color: #f0dbff;
-  color: #7c3aed;
+  background-color: var(--color-info-light);
+  color: var(--color-info);
 }
 
 /* Loading spinner */
@@ -980,7 +987,7 @@ button:focus {
   width: 20px;
   height: 20px;
   border: 2px solid #e5e7eb;
-  border-top-color: #3b82f6;
+  border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -1071,17 +1078,17 @@ button:focus {
 }
 
 .completed-column {
-  background-color: #f0fdf4 !important;
-  border-color: #10b981 !important;
+  background-color: var(--color-success-light) !important;
+  border-color: var(--color-success) !important;
 }
 
 .card-complete-btn {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: #f0fdf4; /* Very faint green (emerald-50) */
-  color: #86efac; /* Light green icon (emerald-400) */
-  border: 1px solid #dcfce7; /* Light green border (emerald-100) */
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+  border: 1px solid var(--color-success);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1091,9 +1098,9 @@ button:focus {
 }
 
 .card-complete-btn:hover {
-  background-color: #dcfce7; /* Slightly more green on hover (emerald-100) */
-  color: #166534; /* Darker green on hover (emerald-800) */
-  border-color: #bbf7d0; /* Slightly darker border (emerald-200) */
+  background-color: var(--color-success);
+  color: white; /* or var(--text-on-primary) */
+  border-color: var(--color-success);
   transform: scale(1.05);
 }
 
@@ -1138,14 +1145,14 @@ button:focus {
 }
 
 [data-theme="dark"] .completed-column {
-  background-color: #065f46 !important;
-  border-color: #059669 !important;
+  background-color: rgba(182, 214, 204, 0.15) !important; /* semi-transparent teal */
+  border-color: var(--color-success) !important;
 }
 
 [data-theme="dark"] .completed-column .column-title {
-  color: #10b981;
+  color: var(--color-success);
 }
 
 [data-theme="dark"] .completed-column .column-title::after {
-  color: #94fa9e;
+  color: rgba(182, 214, 204, 0.8);
 }

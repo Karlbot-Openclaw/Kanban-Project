@@ -68,7 +68,7 @@ class KanbanBoard {
         this.currentCardModalCard = null;
         this.initializeEventListeners();
         this.loadFromFirestore().then(() => {
-            this.ensureCompletedColumn();
+            this.initializeSMGColumns();
             this.initializeTheme();
             this.render();
         });
@@ -276,17 +276,110 @@ class KanbanBoard {
         }
     }
 
-    completeCard(cardId, fromColumnId) {
-        const completedColumn = this.columns.find(col => col.id === 'completed-column');
-        if (!completedColumn) {
-            this.ensureCompletedColumn();
-            // Re-find after creation
-            const newCompleted = this.columns.find(col => col.id === 'completed-column');
-            if (newCompleted) {
-                this.moveCard(cardId, fromColumnId, newCompleted.id);
+    initializeSMGColumns() {
+        const smgColumnNames = ['SMG-Backlog', 'SMG-To Do', 'SMG-In Progress', 'SMG-Review', 'SMG-Done'];
+        
+        smgColumnNames.forEach(name => {
+            let column = this.columns.find(col => col.title === name);
+            const isNew = !column;
+            
+            if (isNew) {
+                const id = name.toLowerCase().replace(/\s+/g, '-');
+                column = { id, title: name, cards: [] };
+                this.columns.push(column);
             }
+            
+            // If newly created column is empty, add sample cards for quick start
+            if (isNew && column.cards.length === 0) {
+                if (name === 'SMG-Backlog') {
+                    column.cards.push({
+                        id: `welcome-${Date.now()}`,
+                        title: 'Kick off Space Mining Game project',
+                        description: 'Define game scope, core mechanics, and technical stack. This is the kickoff task for the SMG project.',
+                        label: 'task',
+                        timestamp: new Date().toISOString(),
+                        checklist: [
+                            { id: `cl-${Date.now()}-1`, text: 'Define game vision and scope', completed: false },
+                            { id: `cl-${Date.now()}-2`, text: 'Choose engine/framework', completed: false },
+                            { id: `cl-${Date.now()}-3`, text: 'Set up development environment', completed: false }
+                        ]
+                    });
+                } else if (name === 'SMG-To Do') {
+                    column.cards.push({
+                        id: `sample-${Date.now()}`,
+                        title: 'Design core mining mechanics',
+                        description: 'Define how mining works: resource extraction, tool durability, inventory limits.',
+                        label: 'feature',
+                        timestamp: new Date().toISOString(),
+                        checklist: [
+                            { id: `cl2-${Date.now()}`, text: 'Resource types and rarity', completed: false },
+                            { id: `cl2-${Date.now()}-2`, text: 'Mining tool mechanics', completed: false },
+                            { id: `cl2-${Date.now()}-3`, text: 'Inventory system design', completed: false }
+                        ]
+                    });
+                } else if (name === 'SMG-In Progress') {
+                    column.cards.push({
+                        id: `progress-${Date.now()}`,
+                        title: 'Set up project repository',
+                        description: 'Initialize version control, basic project structure, and dependencies.',
+                        label: 'task',
+                        timestamp: new Date().toISOString(),
+                        checklist: [
+                            { id: `cl3-${Date.now()}`, text: 'Create git repository', completed: true },
+                            { id: `cl3-${Date.now()}-2`, text: 'Add README with project overview', completed: false },
+                            { id: `cl3-${Date.now()}-3`, text: 'Configure build system', completed: false }
+                        ]
+                    });
+                } else if (name === 'SMG-Review') {
+                    column.cards.push({
+                        id: `review-${Date.now()}`,
+                        title: 'Review game design document',
+                        description: 'Review and provide feedback on the GDD before final approval.',
+                        label: 'enhancement',
+                        timestamp: new Date().toISOString(),
+                        checklist: []
+                    });
+                }
+                // SMG-Done left empty
+            }
+        });
+        
+        this.save();
+        this.render();
+    }
+
+    completeCard(cardId, fromColumnId) {
+        const fromColumn = this.columns.find(col => col.id === fromColumnId);
+        let targetColumnId = null;
+
+        // If source is an SMG column, use SMG-Done as the target
+        if (fromColumn && fromColumn.title.startsWith('SMG-')) {
+            const smgDone = this.columns.find(col => col.title === 'SMG-Done');
+            if (smgDone) {
+                targetColumnId = smgDone.id;
+            } else {
+                console.warn('SMG-Done column not found; falling back to generic completed column');
+            }
+        }
+
+        // Fallback to generic completed column if not SMG or SMG-Done missing
+        if (!targetColumnId) {
+            const completedColumn = this.columns.find(col => col.id === 'completed-column');
+            if (completedColumn) {
+                targetColumnId = completedColumn.id;
+            } else {
+                this.ensureCompletedColumn();
+                const newCompleted = this.columns.find(col => col.id === 'completed-column');
+                if (newCompleted) {
+                    targetColumnId = newCompleted.id;
+                }
+            }
+        }
+
+        if (targetColumnId) {
+            this.moveCard(cardId, fromColumnId, targetColumnId);
         } else {
-            this.moveCard(cardId, fromColumnId, completedColumn.id);
+            console.error('No completed column available to move card to');
         }
     }
 
@@ -318,8 +411,8 @@ class KanbanBoard {
                 fromColumn.cards = fromColumn.cards.filter(c => c.id !== cardId);
                 toColumn.cards.push(card);
                 
-                // Update completed flag based on destination column
-                card.completed = (toColumnId === 'completed-column');
+                // Update completed flag based on destination column (treat Completed and SMG-Done as done)
+                card.completed = (toColumn.title === 'Completed' || toColumn.title === 'SMG-Done');
                 
                 this.save();
                 this.render();
